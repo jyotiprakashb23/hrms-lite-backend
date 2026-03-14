@@ -1,4 +1,3 @@
-# hrms-lite-backend
 # HRMS Lite Backend
 
 ## Project Overview
