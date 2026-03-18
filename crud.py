@@ -3,6 +3,8 @@ import models, schemas
 import uuid
 from fastapi import HTTPException
 
+_employees_cache: list | None = None
+
 
 def create_employee(db: Session, employee: schemas.EmployeeCreate):
 
@@ -29,11 +31,18 @@ def create_employee(db: Session, employee: schemas.EmployeeCreate):
     db.commit()
     db.refresh(db_employee)
 
+    global _employees_cache
+    _employees_cache = None
+
     return db_employee
 
 
 def get_employees(db: Session):
-    return db.query(models.Employee).all()
+    global _employees_cache
+    if _employees_cache is not None:
+        return _employees_cache
+    _employees_cache = db.query(models.Employee).all()
+    return _employees_cache
 
 
 def delete_employee(db: Session, emp_id: str):
@@ -45,9 +54,11 @@ def delete_employee(db: Session, emp_id: str):
     if not employee:
         raise HTTPException(status_code=400, detail="Employee not found")
 
-    if employee:
-        db.delete(employee)
-        db.commit()
+    db.delete(employee)
+    db.commit()
+
+    global _employees_cache
+    _employees_cache = None
 
     return employee
 
