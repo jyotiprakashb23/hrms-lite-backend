@@ -25,13 +25,13 @@ def get_db():
 
 
 # Add employee
-@app.post("/employees", response_model=schemas.EmployeeResponse)
+@app.post("/employees", response_model=schemas.EmployeeResponse, status_code=201)
 def add_employee(employee: schemas.EmployeeCreate, db: Session = Depends(get_db)):
 
     new_employee = crud.create_employee(db, employee)
 
-    if not new_employee:
-        raise HTTPException(status_code=400, detail="Employee already exists")
+    # if not new_employee:
+    #     raise HTTPException(status_code=400, detail="Employee already exists")
 
     return new_employee
 

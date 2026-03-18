@@ -12,7 +12,7 @@ def create_employee(db: Session, employee: schemas.EmployeeCreate):
         .first()
     )
 
-    if existing:
+    if existing: 
         raise HTTPException(
             status_code=400, detail="Employee with this email already exists"
         )
@@ -43,7 +43,7 @@ def delete_employee(db: Session, emp_id: str):
     )
 
     if not employee:
-        raise HTTPException(status_code=404, detail="Employee not found")
+        raise HTTPException(status_code=400, detail="Employee not found")
 
     if employee:
         db.delete(employee)

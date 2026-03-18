@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 from datetime import date
 from enum import Enum
 
@@ -14,7 +14,10 @@ class AttendanceStatus(str,Enum):
     absent = "absent"
 
 class AttendanceCreate(BaseModel):
-    employee_id: str
+    employee_id: str = Field(
+        ...,
+        description="Unique employee identifier (e.g., EMP-33894A)"
+    )
     date: date
     status: AttendanceStatus
 
